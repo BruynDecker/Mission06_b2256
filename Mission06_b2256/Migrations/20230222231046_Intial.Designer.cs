@@ -8,8 +8,8 @@ using Mission06_b2256.Models;
 namespace Mission06_b2256.Migrations
 {
     [DbContext(typeof(EnterFilmContext))]
-    [Migration("20230214053530_Initial")]
-    partial class Initial
+    [Migration("20230222231046_Intial")]
+    partial class Intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,13 +19,12 @@ namespace Mission06_b2256.Migrations
 
             modelBuilder.Entity("Mission06_b2256.Models.ApplicationResponse", b =>
                 {
-                    b.Property<int>("ApplicationID")
+                    b.Property<int>("FilmID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -52,15 +51,17 @@ namespace Mission06_b2256.Migrations
                     b.Property<ushort>("Year")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ApplicationID");
+                    b.HasKey("FilmID");
+
+                    b.HasIndex("CategoryID");
 
                     b.ToTable("Responses");
 
                     b.HasData(
                         new
                         {
-                            ApplicationID = 1,
-                            Category = "Family",
+                            FilmID = 1,
+                            CategoryID = 4,
                             Director = "Brendan Maher, Mark Levin, Jennifer Flackett",
                             Edited = false,
                             Rating = "PG",
@@ -69,8 +70,8 @@ namespace Mission06_b2256.Migrations
                         },
                         new
                         {
-                            ApplicationID = 2,
-                            Category = "Miscellaneous",
+                            FilmID = 2,
+                            CategoryID = 6,
                             Director = "Bruyn Decker, Luke Maas, Spencer Lyman",
                             Edited = false,
                             LentTo = "Bruyn's Parents",
@@ -81,8 +82,8 @@ namespace Mission06_b2256.Migrations
                         },
                         new
                         {
-                            ApplicationID = 3,
-                            Category = "Action/Adventure",
+                            FilmID = 3,
+                            CategoryID = 1,
                             Director = "Martin Campbell",
                             Edited = false,
                             Notes = "The best Bond Film",
@@ -90,6 +91,71 @@ namespace Mission06_b2256.Migrations
                             Title = "Casino Royale",
                             Year = (ushort)2006
                         });
+                });
+
+            modelBuilder.Entity("Mission06_b2256.Models.category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categorys");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryID = 1,
+                            CategoryName = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryID = 2,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryID = 3,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryID = 4,
+                            CategoryName = "Family"
+                        },
+                        new
+                        {
+                            CategoryID = 5,
+                            CategoryName = "Horror/Suspense"
+                        },
+                        new
+                        {
+                            CategoryID = 6,
+                            CategoryName = "miscellaneous"
+                        },
+                        new
+                        {
+                            CategoryID = 7,
+                            CategoryName = "Television"
+                        },
+                        new
+                        {
+                            CategoryID = 8,
+                            CategoryName = "VHS"
+                        });
+                });
+
+            modelBuilder.Entity("Mission06_b2256.Models.ApplicationResponse", b =>
+                {
+                    b.HasOne("Mission06_b2256.Models.category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
