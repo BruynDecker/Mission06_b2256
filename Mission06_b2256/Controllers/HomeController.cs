@@ -22,22 +22,27 @@ namespace Mission06_b2256.Controllers
             blahContext = somename;
         }
 
+        //View for the index.html page
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        //returns view for the page about Joel's podcast
+        public IActionResult Podcasts()
         {
             return View("Podcasts");
         }
 
+        //GET to return the EnterFilm view
         [HttpGet]
         public IActionResult EnterFilm()
         {
             ViewBag.Categorys = blahContext.Categorys.ToList();
             return View();
         }
+
+        //Post the data to the server and return the confirmation view, as long as the data's valid
         [HttpPost]
         public IActionResult EnterFilm(ApplicationResponse ar)
         {
@@ -51,11 +56,10 @@ namespace Mission06_b2256.Controllers
             {
                 ViewBag.Categorys = blahContext.Categorys.ToList();
                 return View(ar);
-            }
-
-            
+            }          
         }
-        
+
+        //returns a list of films
         public IActionResult filmlist()
         {
             var films = blahContext.Responses.
@@ -63,6 +67,7 @@ namespace Mission06_b2256.Controllers
             return View(films);
         }
 
+        //get method to pull up the enter film view, but with the record with the correct FilmID
         [HttpGet]
         public IActionResult Edit(int FilmID)
         {
@@ -71,6 +76,7 @@ namespace Mission06_b2256.Controllers
             return View("EnterFilm", application);
         }
 
+        //POST the updated data and save it, and redirect to the filmlist
         [HttpPost]
         public IActionResult Edit(ApplicationResponse blah)
         {
@@ -78,6 +84,7 @@ namespace Mission06_b2256.Controllers
             blahContext.SaveChanges();
             return RedirectToAction("filmlist");
         }
+        //
         [HttpGet]
         public IActionResult delete(int FilmID)
         {
